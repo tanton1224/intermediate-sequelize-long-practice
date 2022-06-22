@@ -94,13 +94,13 @@ router.get('/:id', async (req, res, next) => {
  *     - Value: object (the new tree)
  */
 router.post('/', async (req, res, next) => {
-    try {
-        const { name, location, height, size } = req.body
+    // try {
+        const { tree, location, heightFt, size } = req.body
 
-        Tree.create({
-            name,
+        await Tree.create({
+            tree,
             location,
-            height,
+            heightFt,
             size
         });
 
@@ -108,13 +108,13 @@ router.post('/', async (req, res, next) => {
             status: "success",
             message: "Successfully created new tree",
         });
-    } catch(err) {
-        next({
-            status: "error",
-            message: 'Could not create new tree',
-            details: err.errors ? err.errors.map(item => item.message).join(', ') : err.message
-        });
-    }
+//     } catch(err) {
+//         next({
+//             status: "error",
+//             message: 'Could not create new tree',
+//             details: err.errors ? err.errors.map(item => item.message).join(', ') : err.message
+//         });
+//     }
 });
 
 /**
@@ -139,6 +139,7 @@ router.post('/', async (req, res, next) => {
  */
 router.delete('/:id', async (req, res, next) => {
     try {
+
         res.json({
             status: "success",
             message: `Successfully removed tree ${req.params.id}`,
