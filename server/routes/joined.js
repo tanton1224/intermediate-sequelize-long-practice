@@ -66,6 +66,7 @@ router.get('/insects-trees', async (req, res, next) => {
 
     res.json(payload);
 });
+// test comment 1
 
 /**
  * ADVANCED PHASE 3 - Record information on an insect found near a tree
