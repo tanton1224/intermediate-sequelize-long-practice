@@ -24,6 +24,12 @@ router.get('/trees-insects', async (req, res, next) => {
 
     trees = await Tree.findAll({
         attributes: ['id', 'tree', 'location', 'heightFt'],
+        include: [{ model: Insect, attributes: ['id', 'name'],
+            through: { attributes: [] } }],
+        order: [
+            ['tree'],
+            [Insect, 'id']
+        ]
     });
 
     res.json(trees);
