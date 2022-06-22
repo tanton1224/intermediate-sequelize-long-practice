@@ -1,11 +1,14 @@
 // Instantiate router - DO NOT MODIFY
 const express = require('express');
+const tree = require('../db/models/tree.js');
 const router = express.Router();
 
 /**
  * BASIC PHASE 1, Step A - Import model
  */
 // Your code here
+const { Op } = require('sequelize')
+const { Tree } = require('../db/models')
 
 /**
  * INTERMEDIATE BONUS PHASE 1 (OPTIONAL), Step A:
@@ -25,8 +28,17 @@ const router = express.Router();
  */
 router.get('/', async (req, res, next) => {
     let trees = [];
+    console.log(Tree)
 
     // Your code here
+    const findTrees = await Tree.findAll({
+        attributes: ['heightFt', 'tree', 'id'],
+        order: [['heightFt', 'DESC']]
+    })
+
+    findTrees.forEach(tree => {
+        trees.push(tree)
+    })
 
     res.json(trees);
 });
@@ -45,6 +57,7 @@ router.get('/:id', async (req, res, next) => {
 
     try {
         // Your code here
+        tree = await Tree.findByPk(req.params.id)
 
         if (tree) {
             res.json(tree);
@@ -82,6 +95,15 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', async (req, res, next) => {
     try {
+        const { name, location, height, size } = req.body
+
+        Tree.create({
+            name,
+            location,
+            height,
+            size
+        });
+
         res.json({
             status: "success",
             message: "Successfully created new tree",
@@ -190,6 +212,16 @@ router.put('/:id', async (req, res, next) => {
 router.get('/search/:value', async (req, res, next) => {
     let trees = [];
 
+    let findTrees = await Tree.findAll({
+        where: {
+            tree: {[Op.like]: `%${req.params.value}%`}
+        }
+    })
+
+    findTrees.forEach(tree => {
+        console.log(tree)
+        trees.push(tree)
+    })
 
     res.json(trees);
 });
